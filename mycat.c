@@ -14,9 +14,9 @@ int main (int arc, char ** argv) {
 	for (i=1; i<arc; i++) {
 		const int fd = open(argv[i],O_RDONLY);
 		if (fd>0) {
-			char * temp = malloc(255*sizeof(char));
-			read(fd, temp, 255);
-			write(1, temp, strlen(temp));
+			char * temp = malloc(1024*sizeof(char));
+			while(read(fd, temp, 1024)!=0)
+			  write(1, temp, strlen(temp));
 			write(1, "\n", 2);
 			free(temp);
 		}
