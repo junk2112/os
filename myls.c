@@ -159,7 +159,7 @@ int main (int arc, char **argv)
     else 
       ls_l(directory, path[i]);
     if (isFewPathes && i!=pathCount-1)
-      printf("\n");
+      printf("%s", "\n");
     closedir(directory);
   }
   return 0;
