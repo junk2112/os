@@ -138,7 +138,6 @@ void ls_l (DIR *directory, char *path)
   }
 }
 
-
 int main (int arc, char **argv) 
 {
   bool key_l = isKey_l(arc, argv);
@@ -152,6 +151,11 @@ int main (int arc, char **argv)
   {
     //printf("key_l is %d, dir is \"%s\" \n", key_l, path[i]);
     DIR *directory = opendir(path[i]);
+    if (directory == NULL)
+    {
+     printf("\"%s\" is file or does not exist \n",path[i]); 
+     continue;
+    }
     if (isFewPathes)
       printf("%s:\n",path[i]);
     if (key_l == false) 
