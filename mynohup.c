@@ -9,16 +9,27 @@ int main (int arc, char **argv)
   {
     char *path = malloc(sizeof(char)*256);  
     strcpy(path, argv[1]);
-    printf("path is %s\n",path);
+    //printf("path is %s\n",path);
     int pid;
     char **a = ++argv;
-    if (pid = fork() == 0)
-    {
-      execve(path, a, NULL);
+    if (pid = fork() == -1)
+    {	
+      printf("fork error\n");
+      return 1;
     }
-    sigaction(SIGHUP, NULL, NULL);
-    waitpid(pid, NULL, NULL);
-    free(path);
+    else
+      if (pid == 0)
+      {
+	execve(path, a, NULL);
+      }
+      else 
+	{
+	  static struct sigaction act;
+	  act.sa_handler = SIG_IGN;
+	  sigaction(SIGHUP, &act, NULL);
+	  waitpid(pid, NULL, NULL);
+	  free(path);
+	}
   }
   return 0;
 }
