@@ -23,11 +23,12 @@ int main (int arc, char **argv)
     char **a = ++argv;
     a=++a;
     alarm(sec);
-    if (pid = fork() == -1)
+    if ( (pid = fork()) == -1)
     {
      printf("fork error\n"); 
      return 1;
     }
+    else
     if (pid == 0)
     {
       execve(path, a, NULL);
