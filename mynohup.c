@@ -1,18 +1,22 @@
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
-int main (int arc, char **argv) 
+void handler (int sig)
 {
-  if (arc <= 1) 
-    printf("There are not any args\n");
-  else
+  printf("handler\n");
+}
+int main (int arc, char **argv, char **envp) 
+{
+  if (arc != 2) 
   {
-    char *path = malloc(sizeof(char)*256);  
-    strcpy(path, argv[1]);
-    //printf("path is %s\n",path);
+    printf("There are not any args\n");
+    return 1;
+  }
+  else
+  {	
+    //printf("hello\n");
     int pid;
-    char **a = ++argv;
-    if (pid = fork() == -1)
+    if ( (pid = fork()) == -1)
     {	
       printf("fork error\n");
       return 1;
@@ -20,15 +24,21 @@ int main (int arc, char **argv)
     else
       if (pid == 0)
       {
-	execve(path, a, NULL);
+	struct sigaction act;
+	act.sa_handler = SIG_IGN;
+	if (sigaction(SIGHUP, &act, NULL) != 0 )
+	{
+	  printf("sigaction error\n");
+	}
+	if (execv(argv[1], argv+2) == -1)
+	{
+	 printf("execv error\n"); 
+	 return 1;
+	}
       }
       else 
 	{
-	  static struct sigaction act;
-	  act.sa_handler = SIG_IGN;
-	  sigaction(SIGHUP, &act, NULL);
 	  waitpid(pid, NULL, NULL);
-	  free(path);
 	}
   }
   return 0;
