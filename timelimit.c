@@ -20,8 +20,7 @@ int main (int arc, char **argv)
     char *path = malloc(sizeof(char)*256);  
     strcpy(path, argv[2]);
     printf("path is %s\n",path);
-    char **a = ++argv;
-    a=++a;
+    char **a = argv+2;
     alarm(sec);
     if ( (pid = fork()) == -1)
     {
