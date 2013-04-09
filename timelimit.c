@@ -9,10 +9,12 @@ void alarmAction (int signum)
   printf("ALARM\n");
   kill(pid,SIGKILL);
 }
-int main (int arc, char **argv) 
+int main (int arc, char **argv, char **env) 
 {
   if (arc <= 1) 
     printf("There are not any args\n");
+  else if (arc == 2)
+    printf("There must be 2 args at least:seconds and path\n");
   else
   {
     int sec = atoi(argv[1]);
@@ -20,8 +22,7 @@ int main (int arc, char **argv)
     char *path = malloc(sizeof(char)*256);  
     strcpy(path, argv[2]);
     printf("path is %s\n",path);
-    char **a = ++argv;
-    a=++a;
+    char **a = argv+2;
     alarm(sec);
     if ( (pid = fork()) == -1)
     {
@@ -31,7 +32,7 @@ int main (int arc, char **argv)
     else
     if (pid == 0)
     {
-      execve(path, a, NULL);
+      execv(path, a);
     }
     else 
     {      
