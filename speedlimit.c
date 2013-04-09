@@ -11,21 +11,14 @@ int time = 1;
 void alarmAction (int signum) 
 {
   printf("ALARM\n");
-  kill(pid,SIGUSR1);
+  //kill(pid,SIGUSR1);
   kill(pid, SIGKILL);
-  char temp[tempSizeOut];
-  while(read(arr[0], &temp, tempSizeOut) > 0) 
-  {
-       bytes += tempSizeOut;
-  }
   close(arr[0]);
-  printf("Total bytes: %d\nPipe speed: %f kb/s\n", bytes, (double)bytes/(1024*time));
-  
 }
-void newHandler (int signum)
+/*void newHandler (int signum)
 {
   close(arr[1]);
-}
+}*/
 int main (int arc, char **argv) 
 {
     
@@ -41,18 +34,25 @@ int main (int arc, char **argv)
     }
     if (pid == 0)
     {
-      signal(SIGUSR1, newHandler);
+      //signal(SIGUSR1, newHandler);
       close(arr[0]);
       while (1) 
       {
 	char temp[tempSizeIn];
 	write (arr[1], &temp, tempSizeIn);
       }
+      close(arr[1]);
     }
     else 
     {      
       alarm(time);
       close(arr[1]);
+      char temp[tempSizeOut];
+      while(read(arr[0], &temp, tempSizeOut) > 0)
+      {
+	bytes += tempSizeOut;
+      }
+      printf("Total bytes: %d\nPipe speed: %f kb/s\n", bytes, (double)bytes/(1024*time));
       if (signal(SIGALRM, alarmAction) == SIG_ERR)
       {
 	printf("sigaction error\n");
