@@ -19,9 +19,7 @@ int main (int arc, char **argv, char **env)
   {
     int sec = atoi(argv[1]);
     printf("sec is %d\n", sec);
-    char *path = malloc(sizeof(char)*256);  
-    strcpy(path, argv[2]);
-    printf("path is %s\n",path);
+    printf("path is %s\n",argv[2]);
     char **a = argv+2;
     alarm(sec);
     if ( (pid = fork()) == -1)
@@ -32,7 +30,12 @@ int main (int arc, char **argv, char **env)
     else
     if (pid == 0)
     {
-      execv(path, a);
+      if(execv(argv[2], a) != -1);
+      else 
+      {
+	printf("Evecv error\n");
+	return 1;
+      }
     }
     else 
     {      
