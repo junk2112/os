@@ -48,7 +48,6 @@ int main (int arc, char **argv, char **env)
       
     }
     waitpid(pid, NULL, NULL);
-    free(path);
   }
   return 0;
 }
