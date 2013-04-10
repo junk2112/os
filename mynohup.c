@@ -7,7 +7,7 @@ void handler (int sig)
 }
 int main (int arc, char **argv, char **envp) 
 {
-  if (arc != 2) 
+  if (arc < 2) 
   {
     printf("There are not any args\n");
     return 1;
@@ -30,7 +30,7 @@ int main (int arc, char **argv, char **envp)
 	{
 	  printf("sigaction error\n");
 	}
-	if (execv(argv[1], argv+2) == -1)
+	if (execv(argv[1], argv+1) == -1)
 	{
 	 printf("execv error\n"); 
 	 return 1;
